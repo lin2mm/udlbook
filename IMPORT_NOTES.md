@@ -72,4 +72,4 @@ Per `activeContext.md` Next Steps #2:
 - Monetization from day one (AdBanner + Remove Ads IAP)
 
 Date: 2026-09-11
-Branch: arena/01a08e52-udlbook
+Branch: ifarted

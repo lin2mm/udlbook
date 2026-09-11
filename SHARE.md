@@ -1,7 +1,7 @@
 # 如何分享 iFarted 成果 — 分享指南
 
 Date: 2026-09-11
-Branch: arena/01a08e52-udlbook
+Branch: ifarted
 Tags: v0.13.0-alpha, v0.14.0-alpha
 Repo: https://github.com/lin2mm/udlbook
 
@@ -10,7 +10,7 @@ Repo: https://github.com/lin2mm/udlbook
 你的所有代码已推送到 GitHub 分支，任何人可查看：
 
 **分支链接**：
-- https://github.com/lin2mm/udlbook/tree/arena/01a08e52-udlbook
+- https://github.com/lin2mm/udlbook/tree/ifarted
 
 **最新提交**：
 - v14 `3f11445` — 最终 README v4 + 架构 + v1.0 Alpha 总结
@@ -28,7 +28,7 @@ Repo: https://github.com/lin2mm/udlbook
 > - Mobile MVP 7屏 + Zustand + 推送/联系人/广告/IAP + FartButton v2触觉动画+SoundPicker 5变体
 > - Web 5173 UDL网站+IFarted演示真API + 5174独立PWA暗色切换SoundPicker AdminDashboard
 > - 文档全面：API_DOCS, PRIVACY, TERMS, DEPLOYMENT_CHECKLIST, STORE_CHECKLIST, APP_REVIEW, RELEASE_NOTES v13
-> - GitHub分支：https://github.com/lin2mm/udlbook/tree/arena/01a08e52-udlbook
+> - GitHub分支：https://github.com/lin2mm/udlbook/tree/ifarted
 > - Tag：v0.14.0-alpha https://github.com/lin2mm/udlbook/releases/tag/v0.14.0-alpha
 
 ## 2. 创建 Pull Request（让他人 Review）
@@ -36,7 +36,7 @@ Repo: https://github.com/lin2mm/udlbook
 已为你准备好 PR，运行：
 
 ```bash
-gh pr create --repo lin2mm/udlbook --base main --head arena/01a08e52-udlbook --title "iFarted v0.14.0-alpha — Final v1.0 Alpha scaffold" --body "v2→v14 完整实现，见 SHARE.md + RELEASE_NOTES_v13.md + README.md v4
+gh pr create --repo lin2mm/udlbook --base main --head ifarted --title "iFarted v0.14.0-alpha — Final v1.0 Alpha scaffold" --body "v2→v14 完整实现，见 SHARE.md + RELEASE_NOTES_v13.md + README.md v4
 
 - Server :3000 Bun+Hono+SQLite 13端点 auth Bearer 限流持久 metrics admin 安全头优雅关闭 健康timestamp+uptime WebSocket可选 负载测试 50 farts 1136 RPS 5音效变体
 - Mobile 7屏 home real friends pull-to-refresh推送处理位置切换AdBanner gated EmptyState onboarding 3路径<60s搜索联系人邀请fart-detail deadpan地图pin fart back设置Remove Ads IAP Restore手机发现邀请隐私退出 stores useAuth useFriends libs api notifications contacts ads iap linking haptics components FartButton v2 haptics动画 SoundPicker config app.json eas.json PrivacyInfo
@@ -76,7 +76,7 @@ ps aux | grep bun
 ```bash
 git clone https://github.com/lin2mm/udlbook.git
 cd udlbook
-git checkout arena/01a08e52-udlbook
+git checkout ifarted
 
 # Server
 cd apps/server
@@ -167,7 +167,7 @@ tar -czf ifarted-v0.14.0-alpha.tar.gz -C /home/user/udlbook --exclude=node_modul
 ```
 
 或 GitHub 直接下载分支 ZIP：
-- https://github.com/lin2mm/udlbook/archive/refs/heads/arena/01a08e52-udlbook.zip
+- https://github.com/lin2mm/udlbook/archive/refs/heads/ifarted.zip
 
 ## 7. 分享文档（非技术同事）
 
@@ -199,9 +199,9 @@ tar -czf ifarted-v0.14.0-alpha.tar.gz -C /home/user/udlbook --exclude=node_modul
 ```
 💨 iFarted v0.14.0-alpha — Final v1.0 Alpha scaffold — 2026-09-11
 
-GitHub: https://github.com/lin2mm/udlbook/tree/arena/01a08e52-udlbook
+GitHub: https://github.com/lin2mm/udlbook/tree/ifarted
 Tag: https://github.com/lin2mm/udlbook/releases/tag/v0.14.0-alpha
-Branch: arena/01a08e52-udlbook
+Branch: ifarted
 Commits: v2→v14 14 pushes
 
 Server live :3000 Bun+Hono+SQLite WAL 13端点 POST /v1/register GET /v1/me POST /v1/tokens POST /v1/farts GET /v1/users/search POST /v1/contacts POST /v1/invites GET /v1/friends ordered lastFartAt POST /v1/friends POST /v1/settings/phone-discovery POST /v1/block + /metrics /v1/stats /admin /admin/users /admin/farts /admin.html HTML仪表 安全头nosniff DENY XSS Referrer HSTS CORS优雅关闭健康timestamp+uptime 5音效变体classic short long squeaky wet WebSocket可选 负载测试 20用户100 farts 100/hour 20活跃 50 farts 1136 RPS 100 farts 819 RPS 测试7 pass unit+E2E+load
@@ -224,11 +224,11 @@ Next EAS dev builds真ExpoPushTokens自定义声音最终位置联系人E2E AdMo
 ## 10. 联系 / 反馈
 
 - GitHub Issues: https://github.com/lin2mm/udlbook/issues
-- 分支: arena/01a08e52-udlbook
+- 分支: ifarted
 - 本地: /home/user/udlbook
 - 3服务器live: :3000 :5173 :5174
 - 文档: README.md v4 + RELEASE_NOTES_v13.md + DEPLOYMENT_CHECKLIST_v1.md + SHARE.md
 
 ---
 
-**一句话总结**：分享 GitHub分支链接 https://github.com/lin2mm/udlbook/tree/arena/01a08e52-udlbook + Tag v0.14.0-alpha + 本地运行命令，即可让任何人复现全部成果；永久分享需按 DEPLOYMENT.md 部署到 Fly/Vercel + TestFlight/Play Internal。
+**一句话总结**：分享 GitHub分支链接 https://github.com/lin2mm/udlbook/tree/ifarted + Tag v0.14.0-alpha + 本地运行命令，即可让任何人复现全部成果；永久分享需按 DEPLOYMENT.md 部署到 Fly/Vercel + TestFlight/Play Internal。

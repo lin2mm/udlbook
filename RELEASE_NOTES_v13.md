@@ -1,7 +1,7 @@
 # iFarted Release Notes — v0.13.0 Alpha (v13 Scaffold) — Final v1.0 Alpha
 
 Date: 2026-09-11
-Branch: arena/01a08e52-udlbook
+Branch: ifarted
 Commits: v2 → v13, 12 pushes
 Tag: v0.13.0-alpha (to be created)
 

@@ -102,7 +102,7 @@ iFarted is a dead-simple cross-platform mobile app: pick a person, optionally at
 ## Links
 
 - Drive folder: https://drive.google.com/drive/folders/18r18wIm0ftoZ1Pq-l2g2MddqCf17sxsX
-- Repo: https://github.com/lin2mm/udlbook/tree/arena/01a08e52-udlbook
+- Repo: https://github.com/lin2mm/udlbook/tree/ifarted
 - Memory Bank: memory-bank/ (6 core files + research/yo-app.md)
 - Mobile: apps/mobile/ (Expo TS, 7 screens)
 - Server: apps/server/ (Bun + Hono + SQLite, 13 endpoints)

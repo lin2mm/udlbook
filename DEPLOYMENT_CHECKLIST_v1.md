@@ -1,7 +1,7 @@
 # iFarted Deployment Checklist — v1.0 Alpha → Beta → Store
 
 Date: 2026-09-11
-Branch: arena/01a08e52-udlbook
+Branch: ifarted
 
 ## Alpha (Current — v11)
 
@@ -74,7 +74,7 @@ Branch: arena/01a08e52-udlbook
 - [ ] Post-launch: monitoring metrics, crashlytics, user feedback, roadmap nice-to-have (sound picker, custom sounds, group farts?, etc.)
 
 ## Current Status (v11)
-- Git: arena/01a08e52-udlbook 26a2fd8 v11 pushed, 3 servers live :3000 :5173 :5174, tests 7 pass + E2E + load 1136 RPS
+- Git: ifarted 26a2fd8 v11 pushed, 3 servers live :3000 :5173 :5174, tests 7 pass + E2E + load 1136 RPS
 - Blockers: EAS dev builds (Expo account + devices), AdMob real IDs (AdMob account), RevenueCat (RevenueCat account), Firebase (Firebase project), final audio (pro sound designer or generated), final icon (designer), domain deploy (Fly/Railway/Vercel)
 - Workflow: GitHub Actions blocked 403 Resource not accessible by integration (GitHub App permission) — local copy /tmp/ifarted-v3.tar.gz, need to manually add .github/workflows/ifarted.yml with push perms
 

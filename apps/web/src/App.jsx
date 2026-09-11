@@ -220,7 +220,7 @@ export default function App() {
 
       <div style={{ marginTop: 16, textAlign: 'center', fontSize: 11, color: subText }}>
         <p>iFarted v0.9.0 Alpha — Scaffold v10 — Server live :3000 — Web demo 5174 — UDL site 5173</p>
-        <p>Drive folder 18r18wIm0ftoZ1Pq-l2g2MddqCf17sxsX · GitHub arena/01a08e52-udlbook · Memory Bank 6 core + research</p>
+        <p>Drive folder 18r18wIm0ftoZ1Pq-l2g2MddqCf17sxsX · GitHub ifarted · Memory Bank 6 core + research</p>
       </div>
     </div>
   );

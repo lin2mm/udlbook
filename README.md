@@ -73,7 +73,7 @@ No inbox/history — notification IS message. Messages table kept only for rate 
 - Server :3000 — /health ok timestamp+uptime, /metrics totalUsers20 totalFarts100 fartsLastHour100 activeUsersLastHour20, /admin.html dashboard, /admin counts+metrics+uptime+memory
 - UDL :5173 — IFartedSection real API register localStorage realFriends metrics log
 - Web :5174 — standalone Vite React full flow register/search/add/fart/invite/metrics/log+sound+arch dark mode toggle SoundPicker AdminDashboard
-- Git: arena/01a08e52-udlbook 96b95c7 v13 pushed, tag v0.13.0-alpha
+- Git: ifarted 96b95c7 v13 pushed, tag v0.13.0-alpha
 
 ## Quick Start
 
@@ -178,4 +178,4 @@ npm run lint
 ```
 
 ## License / Contact
-See original UDL book license + iFarted docs. GitHub arena/01a08e52-udlbook, tag v0.13.0-alpha, Drive folder 18r18wIm0ftoZ1Pq-l2g2MddqCf17sxsX, Memory Bank 6 core + research.
+See original UDL book license + iFarted docs. GitHub ifarted, tag v0.13.0-alpha, Drive folder 18r18wIm0ftoZ1Pq-l2g2MddqCf17sxsX, Memory Bank 6 core + research.

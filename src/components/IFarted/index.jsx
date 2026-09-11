@@ -173,15 +173,15 @@ export default function IFartedSection() {
                 <strong>Metrics:</strong> {metrics ? `${metrics.totalFarts} farts, ${metrics.totalUsers} users, ${metrics.fartsLastHour}/hour` : "loading..."}
               </Subtitle>
               <Subtitle>
-                <Link href="https://github.com/lin2mm/udlbook/tree/arena/01a08e52-udlbook/apps/mobile" target="_blank">
+                <Link href="https://github.com/lin2mm/udlbook/tree/ifarted/apps/mobile" target="_blank">
                   Mobile App (Expo)
                 </Link>
                 {" · "}
-                <Link href="https://github.com/lin2mm/udlbook/tree/arena/01a08e52-udlbook/apps/server" target="_blank">
+                <Link href="https://github.com/lin2mm/udlbook/tree/ifarted/apps/server" target="_blank">
                   Relay Server (Bun)
                 </Link>
                 {" · "}
-                <Link href="https://github.com/lin2mm/udlbook/tree/arena/01a08e52-udlbook/memory-bank" target="_blank">
+                <Link href="https://github.com/lin2mm/udlbook/tree/ifarted/memory-bank" target="_blank">
                   Memory Bank
                 </Link>
               </Subtitle>

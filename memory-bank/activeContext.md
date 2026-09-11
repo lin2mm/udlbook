@@ -1,6 +1,6 @@
 # Active Context — iFarted
 
-*Last updated: 2026-09-11 (session 5 arena) — scaffold v3 complete*
+*Last updated: 2026-09-11 (session 5 ifarted) — scaffold v3 complete*
 
 ## Current State
 - **Scaffold v3 complete — audio assets generated, icons generated, AdMob/IAP real wiring, privacy manifest, UDL website integration with web demo, CI, deployment guide**
@@ -14,10 +14,10 @@
   5. **Branding (closed v3 placeholder):** icons generated via AI (icon.png/adaptive-icon.png/splash.png minimalist black bubble 💨), TODO pro final
   6. **Ads + IAP (closed v3 wiring):** AdMob real BannerAd + fallback, non-personalized, single gated component, IAP RevenueCat favored + expo-iap fallback, $1.99 suggestion, entitlement ad_free, product remove_ads
 
-## Recent Changes (arena)
+## Recent Changes (ifarted)
 - 2026-09-09 (session 3): **Repo initialized & pushed.** Server repo `2re/iFarted` already existed (public/open, created 2026-09-09 13:03Z). Local: `git init -b main`, added `README.md` + `.gitignore`, committed everything, initial commit `8fec909`. Pushed via SSH key (`torrey@nommesen.com`).
 - 2026-09-09 (session 2): Researched Yo! Created `memory-bank/research/yo-app.md`. Answered Bun feasibility (yes). Locked identity, backend, product model.
-- 2026-09-11 (import): **Imported into udlbook arena** via Google Drive folder 18r18wIm0ftoZ1Pq-l2g2MddqCf17sxsX using embeddedfolderview ID extraction workaround (drive.google.com TLS blocked, fetch_page proxy used).
+- 2026-09-11 (import): **Imported into udlbook ifarted** via Google Drive folder 18r18wIm0ftoZ1Pq-l2g2MddqCf17sxsX using embeddedfolderview ID extraction workaround (drive.google.com TLS blocked, fetch_page proxy used).
 - 2026-09-11 (scaffold v1): Monorepo scaffold: contracts, server (Hono+Bun+SQLite), mobile (4 screens). Server tested.
 - 2026-09-11 (scaffold v2): Bun 1.4.2 via npm, server v2 with 11 endpoints (me, friends, add friend, phone-discovery toggle, unblock), mobile v2 with 7 screens + Zustand friends store + notifications lib (channel+token+listeners) + contacts lib + AdBanner gated + FartButton + EmptyState. Integration test `bun src/test.ts` passes. UDL site still builds. Relay server live on :3000.
 - 2026-09-11 (scaffold v3): Audio assets generated (fart.wav 1.2s brown noise + sine sweep down, copied to .caf/.mp3 + android raw), icons generated (icon.png/adaptive/splash minimalist bubble 💨), AdBanner real wiring with BannerAd fallback, IAP real wiring RevenueCat + expo-iap ($1.99 suggestion, entitlement ad_free), PrivacyInfo.xcprivacy, UDL website integration: new IFartedSection component with demo box (tap-to-fart + log + sound + real API try), Navbar + Sidebar links, public/fart assets, .github/workflows/ifarted.yml CI (server+mobile+udl), DEPLOYMENT.md (Docker/Fly.io/Railway/EAS), STORE_CHECKLIST expanded. Server live v2, UDL build 133 modules 309KB, all tests pass.

@@ -1,7 +1,7 @@
 # iFarted Release Notes — v0.11.0 Alpha (v11 Scaffold)
 
 Date: 2026-09-11
-Branch: arena/01a08e52-udlbook
+Branch: ifarted
 Commits: v2 → v11, 10 pushes
 
 ## Overview

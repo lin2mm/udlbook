@@ -18,14 +18,14 @@
 ## Bun question — answer recorded 2026-09-09, installed 2026-09-11
 **Yes, Bun is possible and adopted.** The Expo Push API is a plain HTTPS REST endpoint; Bun (a Node-compatible JS/TS runtime) can call it with built-in `fetch` and run the whole relay with zero native-module risk. Bun also ships `bun:sqlite` for storage and starts fast.
 
-**Installation note (arena):** `bun.sh` TLS blocked (SSL_ERROR_SYSCALL) in this sandbox, same as drive.google.com. Workaround: `npm install -g bun` → Bun 1.4.2 installed to `/usr/local/bin/bun`. Verified: `bun --version` = 1.4.2, `bun src/db/migrate.ts` works, `bun src/index.ts` runs on :3000, `bun src/test.ts` passes. Keep server Node-runnable (tsx fallback) so falling back to `node` is trivial.
+**Installation note (ifarted):** `bun.sh` TLS blocked (SSL_ERROR_SYSCALL) in this sandbox, same as drive.google.com. Workaround: `npm install -g bun` → Bun 1.4.2 installed to `/usr/local/bin/bun`. Verified: `bun --version` = 1.4.2, `bun src/db/migrate.ts` works, `bun src/index.ts` runs on :3000, `bun src/test.ts` passes. Keep server Node-runnable (tsx fallback) so falling back to `node` is trivial.
 
-## Development Environment (current box - arena)
+## Development Environment (current box - ifarted)
 - OS: Linux (Arena). Node v22.x, npm 9.x, Bun 1.4.2 (via npm), git 2.53.0. No Flutter.
 - Android SDK: not needed locally, EAS cloud builds iOS + Android.
 - Workspace: `/home/user/udlbook` — contains both UDL book website (`src/` Vite) + iFarted monorepo (`apps/mobile`, `apps/server`, `packages/contracts`, `.clinerules/`, `memory-bank/`). UDL site `vite build` still passes.
 - Server: `apps/server/ifarted.db` (60K), migrated, live on :3000 (process ifarted-relay-server-v2)
-- Original workspace: `/opt/system/apps/VSCode-iFarted-app/VSCode.AppImage.home/iFarted` (only .clinerules/, memory-bank/ so far) — now mirrored in arena.
+- Original workspace: `/opt/system/apps/VSCode-iFarted-app/VSCode.AppImage.home/iFarted` (only .clinerules/, memory-bank/ so far) — now mirrored in ifarted.
 
 ## Accounts & Services Required (dev → release)
 - Apple Developer Program ($99/yr): signing, APNs key, App Store.

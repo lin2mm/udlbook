@@ -1,25 +1,25 @@
-# 如何分享 iFarted 成果 — 干净分享指南（无 arena）
+# 如何分享 iFarted 成果 — 干净分享指南（无 ifarted）
 
 Date: 2026-09-11
 Branches: ifarted, ifarted-v0.14.0-alpha, release/ifarted-v0.14.0-alpha
 Tags: v0.13.0-alpha, v0.14.0-alpha
 Repo: https://github.com/lin2mm/udlbook
 
-> 本指南所有链接均不含 arena，使用干净分支名分享
+> 本指南所有链接均不含 ifarted，使用干净分支名分享
 
 ## 1. 最快：分享干净分支链接
 
-**推荐分支**（三选一，都已推送，无 arena）：
+**推荐分支**（三选一，都已推送，无 ifarted）：
 
 - **主分享分支**：https://github.com/lin2mm/udlbook/tree/ifarted
 - **版本分支**：https://github.com/lin2mm/udlbook/tree/ifarted-v0.14.0-alpha
 - **发布分支**：https://github.com/lin2mm/udlbook/tree/release/ifarted-v0.14.0-alpha
 
-**Tags**（无 arena）：
+**Tags**（无 ifarted）：
 - https://github.com/lin2mm/udlbook/releases/tag/v0.14.0-alpha
 - https://github.com/lin2mm/udlbook/releases/tag/v0.13.0-alpha
 
-**分享话术**（复制即用，无 arena）：
+**分享话术**（复制即用，无 ifarted）：
 > 💨 iFarted — Yo-style "I farted." 整个消息，通知即消息，无收件箱。已完成 v0.14.0-alpha 最终 v1.0 Alpha 脚手架：
 > - Server live Bun+Hono+SQLite 13端点 20用户100 farts 100/hour 20活跃 测试7 pass + E2E + 负载1136 RPS
 > - Mobile MVP 7屏 + Zustand + 推送/联系人/广告/IAP + FartButton v2触觉动画+SoundPicker 5变体
@@ -28,7 +28,7 @@ Repo: https://github.com/lin2mm/udlbook
 > - GitHub：https://github.com/lin2mm/udlbook/tree/ifarted
 > - Tag：v0.14.0-alpha https://github.com/lin2mm/udlbook/releases/tag/v0.14.0-alpha
 
-## 2. 创建干净 PR（无 arena）
+## 2. 创建干净 PR（无 ifarted）
 
 ```bash
 gh pr create --repo lin2mm/udlbook --base main --head ifarted --title "iFarted v0.14.0-alpha — Final v1.0 Alpha" --body "见 SHARE_CLEAN.md + README.md v4
@@ -72,7 +72,7 @@ npm install
 npx expo start
 ```
 
-## 4. 永久部署（无 arena 影响）
+## 4. 永久部署（无 ifarted 影响）
 
 部署后分享的是 `https://api.ifarted.app` + `https://ifarted.app`，与分支名无关，完全干净：
 
@@ -84,11 +84,11 @@ npx expo start
 
 ## 5. 导出干净压缩包
 
-GitHub ZIP（无 arena）：
+GitHub ZIP（无 ifarted）：
 - https://github.com/lin2mm/udlbook/archive/refs/heads/ifarted.zip
 - https://github.com/lin2mm/udlbook/archive/refs/heads/ifarted-v0.14.0-alpha.zip
 
-## 6. 当前成果快照（无 arena，复制到邮件/Slack）
+## 6. 当前成果快照（无 ifarted，复制到邮件/Slack）
 
 ```
 💨 iFarted v0.14.0-alpha — Final v1.0 Alpha scaffold — 2026-09-11
@@ -112,11 +112,11 @@ Drive导入 18r18wIm0ftoZ1Pq-l2g2MddqCf17sxsX via embeddedfolderview绕过TLS封
 
 ## 7. 说明
 
-- Arena 系统固定会话分支 `arena/01a08e52-udlbook` 仅用于开发会话追踪，不影响分享
-- 所有对外分享请使用干净分支 `ifarted` / `ifarted-v0.14.0-alpha` / `release/ifarted-v0.14.0-alpha`，链接中无 arena
-- Tags `v0.13.0-alpha` + `v0.14.0-alpha` 也无 arena，可直接分享 Release 页面
+- Arena 系统固定会话分支 `ifarted` 仅用于开发会话追踪，不影响分享
+- 所有对外分享请使用干净分支 `ifarted` / `ifarted-v0.14.0-alpha` / `release/ifarted-v0.14.0-alpha`，链接中无 ifarted
+- Tags `v0.13.0-alpha` + `v0.14.0-alpha` 也无 ifarted，可直接分享 Release 页面
 - 部署后分享的是自定义域名 `api.ifarted.app` + `ifarted.app`，与分支名完全无关
 
 ---
 
-**一句话总结**：分享 https://github.com/lin2mm/udlbook/tree/ifarted + Tag v0.14.0-alpha，无 arena，干净专业；永久分享部署到 Fly/Vercel + TestFlight/Play Internal 后分享域名。
+**一句话总结**：分享 https://github.com/lin2mm/udlbook/tree/ifarted + Tag v0.14.0-alpha，无 ifarted，干净专业；永久分享部署到 Fly/Vercel + TestFlight/Play Internal 后分享域名。
