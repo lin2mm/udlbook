@@ -6,6 +6,7 @@ import { generateApiKey, hashApiKey, generateId, generateInviteCode } from "./li
 import { rateLimitFart } from "./lib/rate-limit.ts";
 import { sendExpoPush, buildFartPushMessage } from "./lib/expo-push.ts";
 import { recordFart, getMetrics } from "./lib/metrics.ts";
+import admin from "./admin.ts";
 
 const app = new Hono();
 
@@ -17,6 +18,7 @@ app.get("/", (c) => c.json({ ok: true, service: "ifarted-relay", version: "0.1.0
 app.get("/health", (c) => c.json({ ok: true }));
 app.get("/metrics", (c) => c.json(getMetrics()));
 app.get("/v1/stats", (c) => c.json({ ...getMetrics(), uptime: process.uptime(), memory: process.memoryUsage() }));
+app.route("/admin", admin);
 
 // Simple auth middleware — extracts Bearer apiKey and resolves user
 async function auth(c: any, next: any) {
