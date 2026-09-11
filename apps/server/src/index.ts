@@ -20,6 +20,16 @@ app.get("/metrics", (c) => c.json(getMetrics()));
 app.get("/v1/stats", (c) => c.json({ ...getMetrics(), uptime: process.uptime(), memory: process.memoryUsage() }));
 app.route("/admin", admin);
 
+// Admin HTML dashboard
+app.get("/admin.html", async (c) => {
+  try {
+    const html = await Bun.file(`${import.meta.dir}/admin.html`).text();
+    return c.html(html);
+  } catch {
+    return c.text("admin.html not found", 404);
+  }
+});
+
 // Simple auth middleware — extracts Bearer apiKey and resolves user
 async function auth(c: any, next: any) {
   const header = c.req.header("authorization");

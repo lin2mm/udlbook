@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iFarted Admin Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #fff7ed; color: #000; padding: 24px; }
+    h1 { font-size: 28px; font-weight: 800; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 24px; }
+    .card { background: #fff; border: 2px solid #000; border-radius: 12px; padding: 16px; box-shadow: 4px 4px 0 #000; }
+    .card h3 { font-size: 14px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+    .card .value { font-size: 32px; font-weight: 800; margin-top: 8px; }
+    .card .sub { font-size: 12px; color: #666; margin-top: 4px; }
+    pre { background: #f8f8f8; padding: 12px; border-radius: 8px; overflow-x: auto; font-size: 11px; margin-top: 16px; }
+    button { background: #000; color: #fff; border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-weight: 600; }
+    button:hover { background: #333; }
+    input { padding: 8px; border-radius: 8px; border: 1px solid #ddd; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; background: #fff; border-radius: 12px; overflow: hidden; border: 2px solid #000; }
+    th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 12px; }
+    th { background: #f8f8f8; font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
+  </style>
+</head>
+<body>
+  <h1>💨 iFarted Admin Dashboard</h1>
+  <p style="color: #666; margin-top: 4px;">Relay Server — Bun + Hono + SQLite — Metrics + Users + Farts</p>
+
+  <div style="margin-top: 16px; display: flex; gap: 8;">
+    <input id="adminKey" placeholder="ADMIN_KEY" style="flex: 1;" />
+    <button onclick="load()">Load Dashboard</button>
+    <button onclick="location.reload()">Refresh</button>
+  </div>
+
+  <div class="grid" id="metricsGrid"></div>
+
+  <h2 style="margin-top: 32px;">Recent Users (last 20)</h2>
+  <table id="usersTable"><thead><tr><th>ID</th><th>Username</th><th>Display</th><th>Discovery</th><th>Invite Code</th><th>Created</th></tr></thead><tbody></tbody></table>
+
+  <h2 style="margin-top: 32px;">Recent Farts (last 20)</h2>
+  <table id="fartsTable"><thead><tr><th>ID</th><th>Sender</th><th>Recipient</th><th>Lat</th><th>Lng</th><th>Created</th></tr></thead><tbody></tbody></table>
+
+  <h2 style="margin-top: 32px;">Raw JSON</h2>
+  <pre id="raw"></pre>
+
+  <script>
+    const API_URL = window.location.origin;
+
+    async function api(path) {
+      const key = document.getElementById('adminKey').value || localStorage.getItem('adminKey') || '';
+      if (key) localStorage.setItem('adminKey', key);
+      const url = `${API_URL}${path}${path.includes('?') ? '&' : '?'}key=${encodeURIComponent(key)}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`${path} ${res.status}: ${await res.text()}`);
+      return res.json();
+    }
+
+    async function load() {
+      try {
+        const data = await api('/admin');
+        document.getElementById('raw').textContent = JSON.stringify(data, null, 2);
+
+        const metrics = data.metrics;
+        const db = data.db;
+        document.getElementById('metricsGrid').innerHTML = `
+          <div class="card"><h3>Total Users (DB)</h3><div class="value">${db.users}</div><div class="sub">push_tokens ${db.tokens}, relationships ${db.relationships}</div></div>
+          <div class="card"><h3>Total Farts (DB)</h3><div class="value">${db.messages}</div><div class="sub">invites ${db.invites}</div></div>
+          <div class="card"><h3>Farts (Metrics)</h3><div class="value">${metrics.totalFarts}</div><div class="sub">${metrics.fartsLastHour}/hour, ${metrics.activeUsersLastHour} active/hour</div></div>
+          <div class="card"><h3>Users (Metrics)</h3><div class="value">${metrics.totalUsers}</div><div class="sub">in-memory 24h window</div></div>
+          <div class="card"><h3>Uptime</h3><div class="value">${(data.uptime/60).toFixed(1)}m</div><div class="sub">RSS ${(data.memory.rss/1024/1024).toFixed(1)}MB</div></div>
+        `;
+
+        const users = await api('/admin/users');
+        document.querySelector('#usersTable tbody').innerHTML = users.users.slice(0,20).map(u => `
+          <tr><td>${u.id.slice(0,8)}...</td><td>@${u.username || ''}</td><td>${u.display_name || ''}</td><td>${u.phone_discovery ? '✅' : '❌'}</td><td>${u.invite_code}</td><td>${new Date(u.created_at).toLocaleString()}</td></tr>
+        `).join('');
+
+        const farts = await api('/admin/farts');
+        document.querySelector('#fartsTable tbody').innerHTML = farts.farts.slice(0,20).map(f => `
+          <tr><td>${f.id.slice(0,8)}...</td><td>${f.sender_id.slice(0,8)}...</td><td>${f.recipient_id.slice(0,8)}...</td><td>${f.lat || ''}</td><td>${f.lng || ''}</td><td>${new Date(f.created_at).toLocaleString()}</td></tr>
+        `).join('');
+
+      } catch (e) {
+        document.getElementById('raw').textContent = `Error: ${e.message}\n\nSet ADMIN_KEY env var on server and enter it above.\nExample: ADMIN_KEY=test123 bun src/index.ts\nThen enter test123 and Load.`;
+      }
+    }
+
+    // Auto-load if key in localStorage
+    if (localStorage.getItem('adminKey')) {
+      document.getElementById('adminKey').value = localStorage.getItem('adminKey');
+      load();
+    }
+  </script>
+</body>
+</html>
