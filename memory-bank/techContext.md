@@ -15,14 +15,17 @@
 | IAP | `expo-iap` **or** RevenueCat `react-native-purchases` | RevenueCat favored (entitlements + restore); final TBD |
 | Navigation | expo-router | File-based |
 
-## Bun question — answer recorded 2026-09-09
-**Yes, Bun is possible and adopted.** The Expo Push API is a plain HTTPS REST endpoint; Bun (a Node-compatible JS/TS runtime) can call it with built-in `fetch` and run the whole relay with zero native-module risk. Bun also ships `bun:sqlite` for storage and starts fast. **Caveats:** Bun is *not installed on this box yet* (install via `curl -fsSL https://bun.sh/install | bash` → `~/.bun/bin/bun`); keep the server code Node-runnable so falling back to `node` is trivial; avoid bun-only APIs except optional `bun:sqlite` (swap to `better-sqlite3` if we need Node-only). Node v22 is the fallback runtime.
+## Bun question — answer recorded 2026-09-09, installed 2026-09-11
+**Yes, Bun is possible and adopted.** The Expo Push API is a plain HTTPS REST endpoint; Bun (a Node-compatible JS/TS runtime) can call it with built-in `fetch` and run the whole relay with zero native-module risk. Bun also ships `bun:sqlite` for storage and starts fast.
 
-## Development Environment (current box)
-- OS: Linux. Node v22.22.1, npm 9.2.0, OpenJDK 25.0.4, Python 3.14.4, git 2.53.0. **Bun not yet installed.** No Flutter (not needed).
-- Android SDK availability **TBD** — needed for local Android builds/emulator; EAS can cloud-build if absent.
-- Workspace: `/opt/system/apps/VSCode-iFarted-app/VSCode.AppImage.home/iFarted` (only `.clinerules/`, `memory-bank/` so far).
-- Arena import: `/home/user/udlbook` — now contains both UDL book website and iFarted scaffold.
+**Installation note (arena):** `bun.sh` TLS blocked (SSL_ERROR_SYSCALL) in this sandbox, same as drive.google.com. Workaround: `npm install -g bun` → Bun 1.4.2 installed to `/usr/local/bin/bun`. Verified: `bun --version` = 1.4.2, `bun src/db/migrate.ts` works, `bun src/index.ts` runs on :3000, `bun src/test.ts` passes. Keep server Node-runnable (tsx fallback) so falling back to `node` is trivial.
+
+## Development Environment (current box - arena)
+- OS: Linux (Arena). Node v22.x, npm 9.x, Bun 1.4.2 (via npm), git 2.53.0. No Flutter.
+- Android SDK: not needed locally, EAS cloud builds iOS + Android.
+- Workspace: `/home/user/udlbook` — contains both UDL book website (`src/` Vite) + iFarted monorepo (`apps/mobile`, `apps/server`, `packages/contracts`, `.clinerules/`, `memory-bank/`). UDL site `vite build` still passes.
+- Server: `apps/server/ifarted.db` (60K), migrated, live on :3000 (process ifarted-relay-server-v2)
+- Original workspace: `/opt/system/apps/VSCode-iFarted-app/VSCode.AppImage.home/iFarted` (only .clinerules/, memory-bank/ so far) — now mirrored in arena.
 
 ## Accounts & Services Required (dev → release)
 - Apple Developer Program ($99/yr): signing, APNs key, App Store.

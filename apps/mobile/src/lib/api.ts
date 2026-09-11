@@ -31,6 +31,8 @@ export const Api = {
   register: (body: { username?: string; phoneE164?: string; inviteCode?: string; displayName?: string }) =>
     apiFetch("/v1/register", { method: "POST", body }),
 
+  me: (apiKey: string) => apiFetch("/v1/me", { apiKey }),
+
   registerToken: (apiKey: string, body: { expoPushToken: string; platform: "ios" | "android" }) =>
     apiFetch("/v1/tokens", { method: "POST", apiKey, body }),
 
@@ -46,4 +48,14 @@ export const Api = {
   createInvite: (apiKey: string) => apiFetch("/v1/invites", { method: "POST", apiKey }),
 
   block: (apiKey: string, userId: string) => apiFetch("/v1/block", { method: "POST", apiKey, body: { userId } }),
+
+  unblock: (apiKey: string, userId: string) => apiFetch("/v1/unblock", { method: "POST", apiKey, body: { userId } }),
+
+  friends: (apiKey: string) => apiFetch("/v1/friends", { apiKey }) as Promise<{ friends: any[] }>,
+
+  addFriend: (apiKey: string, userId: string, via: "username" | "contacts" | "invite" = "username") =>
+    apiFetch("/v1/friends", { method: "POST", apiKey, body: { userId, via } }),
+
+  setPhoneDiscovery: (apiKey: string, enabled: boolean) =>
+    apiFetch("/v1/settings/phone-discovery", { method: "POST", apiKey, body: { enabled } }),
 };

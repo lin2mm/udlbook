@@ -26,6 +26,9 @@ export default function RootLayout() {
       <Stack.Screen name="onboarding" options={{ title: "Get Started", headerShown: false }} />
       <Stack.Screen name="fart-detail" options={{ title: "Fart" }} />
       <Stack.Screen name="settings" options={{ title: "Settings" }} />
+      <Stack.Screen name="search" options={{ title: "Search @username" }} />
+      <Stack.Screen name="contacts" options={{ title: "Contacts" }} />
+      <Stack.Screen name="invite" options={{ title: "Invite" }} />
     </Stack>
   );
 }

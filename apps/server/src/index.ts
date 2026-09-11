@@ -344,6 +344,116 @@ app.post("/v1/invites", auth, async (c) => {
   return c.json({ code, deepLink, inviteLink });
 });
 
+// GET /v1/me — current user profile
+app.get("/v1/me", auth, async (c) => {
+  const user = c.get("user");
+  return c.json({
+    id: user.id,
+    username: user.username,
+    displayName: user.display_name,
+    phoneE164: user.phone_e164,
+    phoneDiscovery: !!user.phone_discovery,
+    inviteCode: user.invite_code,
+    createdAt: user.created_at,
+  });
+});
+
+// GET /v1/friends — list of added friends with latest fart time (Yo-style home ordering)
+app.get("/v1/friends", auth, async (c) => {
+  const user = c.get("user");
+  const db = await getDb();
+  let friends: any[] = [];
+  try {
+    const sql = `
+      SELECT u.id, u.username, u.display_name as displayName, r.added_via as addedVia, r.created_at as addedAt,
+             (SELECT created_at FROM messages WHERE (sender_id = u.id AND recipient_id = ? ) OR (sender_id = ? AND recipient_id = u.id) ORDER BY created_at DESC LIMIT 1) as lastFartAt
+      FROM relationships r
+      JOIN users u ON u.id = r.peer_id
+      WHERE r.owner_id = ? AND r.status = 'added'
+      ORDER BY lastFartAt DESC NULLS LAST, r.created_at DESC
+      LIMIT 100
+    `;
+    if (db.query) {
+      friends = db.query(sql).all(user.id, user.id, user.id) as any[];
+    } else {
+      friends = db.prepare(sql).all(user.id, user.id, user.id) as any[];
+    }
+  } catch (e) {
+    console.error("[friends] db error", e);
+  }
+  return c.json({ friends });
+});
+
+// POST /v1/friends — add friend by userId (username search flow)
+app.post("/v1/friends", auth, async (c) => {
+  const owner = c.get("user");
+  const body = await c.req.json().catch(() => ({}));
+  const { userId, via } = body;
+  if (!userId) return c.json({ error: "userId required" }, 400);
+
+  const db = await getDb();
+  // Check peer exists
+  let peer: any = null;
+  try {
+    if (db.query) peer = db.query("SELECT id FROM users WHERE id = ?").get(userId);
+    else peer = db.prepare("SELECT id FROM users WHERE id = ?").get(userId);
+  } catch {}
+  if (!peer) return c.json({ error: "peer not found" }, 404);
+  if (peer.id === owner.id) return c.json({ error: "can't add yourself" }, 400);
+
+  const id = generateId();
+  const now = new Date().toISOString();
+  const addedVia = via && ["username", "contacts", "invite"].includes(via) ? via : "username";
+
+  try {
+    if (db.query) {
+      db.query("INSERT OR IGNORE INTO relationships (id, owner_id, peer_id, status, added_via, created_at) VALUES (?, ?, ?, ?, ?, ?)").run(
+        id,
+        owner.id,
+        userId,
+        "added",
+        addedVia,
+        now
+      );
+    } else {
+      db.prepare("INSERT OR IGNORE INTO relationships (id, owner_id, peer_id, status, added_via, created_at) VALUES (?, ?, ?, ?, ?, ?)").run(
+        id,
+        owner.id,
+        userId,
+        "added",
+        addedVia,
+        now
+      );
+    }
+  } catch (e) {
+    console.error("[friends add] db error", e);
+    return c.json({ error: "db error" }, 500);
+  }
+
+  return c.json({ ok: true });
+});
+
+// POST /v1/settings/phone-discovery — toggle phone discovery
+app.post("/v1/settings/phone-discovery", auth, async (c) => {
+  const user = c.get("user");
+  const body = await c.req.json().catch(() => ({}));
+  const { enabled } = body;
+  if (typeof enabled !== "boolean") return c.json({ error: "enabled boolean required" }, 400);
+
+  const db = await getDb();
+  try {
+    if (db.query) {
+      db.query("UPDATE users SET phone_discovery = ?, updated_at = ? WHERE id = ?").run(enabled ? 1 : 0, new Date().toISOString(), user.id);
+    } else {
+      db.prepare("UPDATE users SET phone_discovery = ?, updated_at = ? WHERE id = ?").run(enabled ? 1 : 0, new Date().toISOString(), user.id);
+    }
+  } catch (e) {
+    console.error("[phone-discovery] db error", e);
+    return c.json({ error: "db error" }, 500);
+  }
+  return c.json({ ok: true, phoneDiscovery: enabled });
+});
+
 // POST /v1/block
 app.post("/v1/block", auth, async (c) => {
   const owner = c.get("user");
@@ -379,6 +489,27 @@ app.post("/v1/block", auth, async (c) => {
     return c.json({ error: "db error" }, 500);
   }
 
+  return c.json({ ok: true });
+});
+
+// POST /v1/unblock — remove block
+app.post("/v1/unblock", auth, async (c) => {
+  const owner = c.get("user");
+  const body = await c.req.json().catch(() => ({}));
+  const { userId } = body;
+  if (!userId) return c.json({ error: "userId required" }, 400);
+
+  const db = await getDb();
+  try {
+    if (db.query) {
+      db.query("DELETE FROM relationships WHERE owner_id = ? AND peer_id = ? AND status = 'blocked'").run(owner.id, userId);
+    } else {
+      db.prepare("DELETE FROM relationships WHERE owner_id = ? AND peer_id = ? AND status = 'blocked'").run(owner.id, userId);
+    }
+  } catch (e) {
+    console.error("[unblock] db error", e);
+    return c.json({ error: "db error" }, 500);
+  }
   return c.json({ ok: true });
 });
 

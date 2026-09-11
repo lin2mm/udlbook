@@ -46,12 +46,18 @@ apps/server/ifarted.db
 apps/server/ifarted.db-wal
 apps/server/ifarted.db-shm
 apps/server/.env
+apps/server/bun.lock
 packages/*/node_modules
 packages/*/dist
 bun.lockb
 .expo
 .expo-shared
 *.db
+*.db-shm
+*.db-wal
 .env
 .env.local
+ifarted.db
+ifarted.db-shm
+ifarted.db-wal
 

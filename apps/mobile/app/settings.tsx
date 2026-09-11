@@ -1,11 +1,18 @@
 import { View, Text, TouchableOpacity, Alert, Switch } from "react-native";
 import { useAuth } from "../src/store/useAuth";
 import { Api } from "../src/lib/api";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Settings() {
   const { isAdFree, setAdFree, apiKey, username, clear } = useAuth();
   const [phoneDiscovery, setPhoneDiscovery] = useState(false);
+
+  useEffect(() => {
+    if (!apiKey) return;
+    Api.me(apiKey)
+      .then((me: any) => setPhoneDiscovery(!!me.phoneDiscovery))
+      .catch(() => {});
+  }, [apiKey]);
 
   const buyRemoveAds = async () => {
     // Placeholder — real implementation uses expo-iap or RevenueCat
@@ -58,7 +65,19 @@ export default function Settings() {
 
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 12, backgroundColor: "#f8f8f8", borderRadius: 12 }}>
           <Text>Phone discovery (opt-in)</Text>
-          <Switch value={phoneDiscovery} onValueChange={setPhoneDiscovery} />
+          <Switch
+            value={phoneDiscovery}
+            onValueChange={async (v) => {
+              setPhoneDiscovery(v);
+              if (!apiKey) return;
+              try {
+                await Api.setPhoneDiscovery(apiKey, v);
+              } catch (e: any) {
+                Alert.alert("Failed", e.message);
+                setPhoneDiscovery(!v);
+              }
+            }}
+          />
         </View>
 
         <TouchableOpacity onPress={createInvite} style={{ padding: 12, backgroundColor: "#f8f8f8", borderRadius: 12 }}>
