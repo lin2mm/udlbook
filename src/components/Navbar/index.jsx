@@ -45,6 +45,19 @@ export default function Navbar({ toggle }) {
                         <NavMenu>
                             <NavItem>
                                 <NavLinks
+                                    to="ifarted"
+                                    smooth={true}
+                                    duration={500}
+                                    spy={true}
+                                    exact="true"
+                                    offset={-80}
+                                    activeClass="active"
+                                >
+                                    iFarted
+                                </NavLinks>
+                            </NavItem>
+                            <NavItem>
+                                <NavLinks
                                     to="Notebooks"
                                     smooth={true}
                                     duration={500}

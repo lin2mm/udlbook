@@ -1,61 +1,103 @@
 /**
  * Remove Ads IAP — one-time non-consumable, restorable
- * Library TBD: expo-iap vs RevenueCat (RevenueCat favored for cross-platform entitlement mgmt + restore)
- *
- * This file shows both options, with RevenueCat as primary.
+ * Library decision: RevenueCat favored (cross-platform entitlement mgmt + restore), expo-iap as fallback
+ * Price: $1.99 suggestion (open decision, research competitors)
  */
 
-// Option A: RevenueCat (favored)
-// npm install react-native-purchases
-// import Purchases from 'react-native-purchases';
+import { Platform } from "react-native";
 
 export const IAP_PRODUCT_ID = "remove_ads";
+export const ENTITLEMENT_ID = "ad_free"; // RevenueCat entitlement
 
-export async function initIAP() {
-  // RevenueCat example:
-  // Purchases.configure({
-  //   apiKey: Platform.OS === 'ios' ? 'appl_...' : 'goog_...',
-  // });
-  // const customerInfo = await Purchases.getCustomerInfo();
-  // return customerInfo.entitlements.active['ad_free'] !== undefined;
+let Purchases: any = null;
+let RNIap: any = null;
 
-  // expo-iap example:
-  // await RNIap.initConnection();
-  // const products = await RNIap.getProducts({ skus: [IAP_PRODUCT_ID] });
+try {
+  Purchases = require("react-native-purchases").default;
+} catch {
+  console.log("[iap] react-native-purchases not available");
+}
 
-  console.log("[iap] init placeholder — wire RevenueCat or expo-iap");
+try {
+  RNIap = require("react-native-iap");
+} catch {
+  console.log("[iap] react-native-iap not available");
+}
+
+// RevenueCat API keys — set via EAS env vars, never commit
+// iOS: appl_..., Android: goog_...
+const REVENUECAT_API_KEY = Platform.OS === "ios" ? process.env.EXPO_PUBLIC_RC_IOS_KEY || "appl_placeholder" : process.env.EXPO_PUBLIC_RC_ANDROID_KEY || "goog_placeholder";
+
+export async function initIAP(): Promise<boolean> {
+  try {
+    if (Purchases) {
+      // RevenueCat (favored)
+      Purchases.configure({ apiKey: REVENUECAT_API_KEY });
+      // Enable debug logs in dev
+      if (__DEV__) {
+        Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG);
+      }
+      const customerInfo = await Purchases.getCustomerInfo();
+      const isAdFree = customerInfo.entitlements.active[ENTITLEMENT_ID] !== undefined;
+      console.log(`[iap] RevenueCat init, isAdFree=${isAdFree}`);
+      return isAdFree;
+    } else if (RNIap) {
+      // expo-iap fallback
+      await RNIap.initConnection();
+      const products = await RNIap.getProducts({ skus: [IAP_PRODUCT_ID] });
+      console.log("[iap] expo-iap products", products);
+      const purchases = await RNIap.getAvailablePurchases();
+      const isAdFree = purchases.some((p: any) => p.productId === IAP_PRODUCT_ID);
+      return isAdFree;
+    }
+  } catch (e) {
+    console.warn("[iap] init failed", e);
+  }
+
+  console.log("[iap] init placeholder — no IAP lib, returning false (ads shown)");
   return false;
 }
 
 export async function purchaseRemoveAds(): Promise<boolean> {
   try {
-    // RevenueCat:
-    // const { customerInfo } = await Purchases.purchaseProduct(IAP_PRODUCT_ID);
-    // return customerInfo.entitlements.active['ad_free'] !== undefined;
+    if (Purchases) {
+      const { customerInfo } = await Purchases.purchaseProduct(IAP_PRODUCT_ID);
+      const isAdFree = customerInfo.entitlements.active[ENTITLEMENT_ID] !== undefined;
+      console.log(`[iap] RevenueCat purchase, isAdFree=${isAdFree}`);
+      return isAdFree;
+    } else if (RNIap) {
+      await RNIap.requestPurchase({ sku: IAP_PRODUCT_ID });
+      // For expo-iap, purchase is async via listener — for MVP return true and rely on restore/listener
+      return true;
+    }
 
-    // expo-iap:
-    // await RNIap.requestPurchase({ sku: IAP_PRODUCT_ID });
-    // return true;
-
-    console.log("[iap] purchaseRemoveAds placeholder — simulate success");
+    console.log("[iap] purchaseRemoveAds placeholder — simulate success for dev");
     return true;
-  } catch (e) {
+  } catch (e: any) {
+    if (e.userCancelled) {
+      console.log("[iap] user cancelled");
+      return false;
+    }
     console.error("[iap] purchase failed", e);
-    return false;
+    throw e;
   }
 }
 
 export async function restorePurchases(): Promise<boolean> {
   try {
-    // RevenueCat:
-    // const customerInfo = await Purchases.restorePurchases();
-    // return customerInfo.entitlements.active['ad_free'] !== undefined;
+    if (Purchases) {
+      const customerInfo = await Purchases.restorePurchases();
+      const isAdFree = customerInfo.entitlements.active[ENTITLEMENT_ID] !== undefined;
+      console.log(`[iap] RevenueCat restore, isAdFree=${isAdFree}`);
+      return isAdFree;
+    } else if (RNIap) {
+      const purchases = await RNIap.getAvailablePurchases();
+      const isAdFree = purchases.some((p: any) => p.productId === IAP_PRODUCT_ID);
+      console.log(`[iap] expo-iap restore, isAdFree=${isAdFree}`);
+      return isAdFree;
+    }
 
-    // expo-iap:
-    // const purchases = await RNIap.getAvailablePurchases();
-    // return purchases.some(p => p.productId === IAP_PRODUCT_ID);
-
-    console.log("[iap] restore placeholder");
+    console.log("[iap] restore placeholder — no lib");
     return false;
   } catch (e) {
     console.error("[iap] restore failed", e);
@@ -63,6 +105,14 @@ export async function restorePurchases(): Promise<boolean> {
   }
 }
 
+// Listener for expo-iap purchase updates (if using expo-iap)
+// Should be set up in app/_layout.tsx:
+// RNIap.purchaseUpdatedListener(async (purchase) => { ... })
+// RNIap.purchaseErrorListener((error) => { ... })
+
 // Entitlement source of truth = store state
 // Launch + purchase + restore resolve isAdFree → ad components unmount and stop loading
 // Product must be non-consumable, restorable, store-billed (out-of-band payment is rejection)
+// Price: $1.99 suggestion — create product in App Store Connect + Play Console with same ID "remove_ads"
+// RevenueCat: create entitlement "ad_free" linked to product "remove_ads" in dashboard
+

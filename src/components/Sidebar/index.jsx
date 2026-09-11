@@ -16,6 +16,9 @@ export default function Sidebar({ isOpen, toggle }) {
                 </Icon>
                 <SidebarWrapper>
                     <SidebarMenu>
+                        <SidebarLink to="ifarted" onClick={toggle}>
+                            iFarted
+                        </SidebarLink>
                         <SidebarLink to="Notebooks" onClick={toggle}>
                             Notebooks
                         </SidebarLink>

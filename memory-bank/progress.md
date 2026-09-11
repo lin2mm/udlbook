@@ -29,14 +29,17 @@
 2. ~~Scaffold monorepo: `apps/mobile` (Expo TS), `apps/server` (Bun + Hono + bun:sqlite), `packages/contracts` (shared types).~~ ✅ **done** in arena (2026-09-11)
 3. ~~Install Bun; implement relay server per systemPatterns REST API (register/tokens/farts/search/contacts/invites/block + rate limiting).~~ ✅ **done** — Bun 1.4.2 via npm, 11 endpoints, rate limiting, integration test passes
 4. ~~Client screens per productContext (onboarding incl. 3 add-friend paths, home list, fart detail + map, settings).~~ ✅ **done** — 7 screens, Zustand stores, AdBanner gated, FartButton, EmptyState, contacts lib, notifications lib
-5. Device-to-device fart end-to-end: two dev builds, Expo Push API, custom sound, location payload. ← **NEXT** (needs real devices + EAS dev build + custom sound asset)
-6. Ads (AdMob banner) + Remove Ads IAP + gating + restore. — placeholder done, needs real AdMob IDs + RevenueCat/expo-iap wiring
-7. Permissions/privacy polish (purpose strings, privacy labels). — purpose strings in app.json done, needs privacy manifest + store labels
-8. Alpha on real devices (both platforms).
-9. Store assets + compliance review → TestFlight + Play internal testing.
+5. ~~Audio asset + AdMob + IAP wiring + privacy manifest + UDL integration~~ ✅ **done v3** — fart.wav/caf/mp3 generated (brown noise + sine sweep down, 1.2s <30s), icons generated (icon.png/adaptive/splash minimalist bubble 💨), AdBanner real BannerAd + fallback, IAP RevenueCat + expo-iap wiring ($1.99 suggestion, entitlement ad_free), PrivacyInfo.xcprivacy, UDL website IFartedSection with demo box + Navbar/Sidebar links + public/fart assets, CI workflow, DEPLOYMENT.md, STORE_CHECKLIST expanded
+6. Device-to-device fart end-to-end: two dev builds, Expo Push API, custom sound final asset, location payload. ← **NEXT** (needs real devices + EAS dev build)
+7. Alpha on real devices (both platforms).
+8. Store assets final (pro icon, screenshots, copy) + compliance review → TestFlight + Play internal testing.
 
-## Remaining Minor Open Items
-Audio asset · Remove Ads price/lib · ad placement confirmation · final branding · deploy target (see activeContext.md).
+## Remaining Minor Open Items (v3 — mostly closed)
+- ~~Audio asset~~ ✅ generated placeholder fart.wav/caf/mp3 (brown noise + sine sweep down, 1.2s <30s), TODO pro sound final
+- ~~Remove Ads price/lib~~ ✅ $1.99 suggestion + RevenueCat favored + expo-iap fallback wired in src/lib/iap.ts, TODO create products in App Store Connect + Play Console
+- ~~Ad placement~~ ✅ banner on home (default), single gated AdBanner, non-personalized, no ATT, TODO confirm no interstitial before send
+- ~~Branding~~ ✅ placeholder icons generated (icon.png/adaptive/splash minimalist bubble 💨), TODO pro icon + screenshots + store copy tone pass
+- ~~Deploy target~~ ✅ documented Fly.io/Railway/VPS + Docker + EAS, TODO choose final + domain ifarted.app + api.ifarted.app
 
 ## Known Issues / Risks
 - **iOS review:** Yo was initially rejected for being "too simple" → have the context-based messaging explanation ready; keep copy clean.
@@ -51,4 +54,5 @@ Audio asset · Remove Ads price/lib · ad placement confirmation · final brandi
 - **2026-09-09 (s2)** — Yo! app researched (`memory-bank/research/yo-app.md`); Bun feasibility answered (yes); decisions locked: identity = all three mechanisms, backend = Bun + Expo Push API, product = Yo-style context-based messaging with ephemeral farts. Memory-bank core files updated.
 - **2026-09-11 (import)** — Imported into lin2mm/udlbook arena branch via Drive workaround (embeddedfolderview IDs). Scaffold of monorepo started.
 - **2026-09-11 (scaffold v1)** — Monorepo scaffold: contracts, server (Hono+Bun+SQLite), mobile (Expo TS + 4 screens). Server tested.
-- **2026-09-11 (scaffold v2)** — Bun 1.4.2 installed via npm (bun.sh TLS blocked). Server enhanced with 11 endpoints (me, friends, add friend, phone-discovery toggle, unblock). Mobile enhanced: 7 screens (search, contacts, invite), Zustand friends store, notifications lib (channel + token + listeners), contacts lib, AdBanner gated, FartButton, EmptyState. Integration test passes. UDL website still builds.
+- **2026-09-11 (scaffold v2)** — Bun 1.4.2 installed via npm (bun.sh TLS blocked). Server enhanced with 11 endpoints (me, friends, add friend, phone-discovery toggle, unblock). Mobile enhanced: 7 screens (search, contacts, invite), Zustand friends store, notifications lib (channel+token+listeners), contacts lib, AdBanner gated, FartButton, EmptyState. Integration test passes. UDL website still builds.
+- **2026-09-11 (scaffold v3)** — Audio assets generated (fart.wav 1.2s brown noise + sine sweep down, copied to .caf/.mp3 + android raw), icons generated (icon.png/adaptive/splash minimalist bubble 💨), AdBanner real wiring with BannerAd fallback, IAP real wiring RevenueCat + expo-iap ($1.99 suggestion, entitlement ad_free), PrivacyInfo.xcprivacy, UDL website integration: new IFartedSection component with demo box (tap-to-fart + log + sound + real API try), Navbar + Sidebar links, public/fart assets, .github/workflows/ifarted.yml CI (server+mobile+udl), DEPLOYMENT.md (Docker/Fly.io/Railway/EAS), STORE_CHECKLIST expanded. Server live v2, UDL build 133 modules 309KB, all tests pass.

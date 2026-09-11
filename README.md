@@ -31,8 +31,48 @@ from day one.
 - Free tier with ads (AdMob)
 - One-time **Remove Ads** IAP (non-consumable, restorable)
 
-## Status
-Design locked, zero code. Planning notes live in [`memory-bank/`](memory-bank/).
+## Status (2026-09-11 — scaffold v3)
+- **Scaffold v3 complete**: relay server live on :3000 (Bun 1.4.2, 11 endpoints, integration test passes), mobile MVP 7 screens + Zustand stores + notifications/contacts/ads/iap libs + gated AdBanner + FartButton + EmptyState, contracts shared types, sound assets generated (fart.wav/caf/mp3), icons generated, UDL website integration with iFarted demo section + web demo (tap-to-fart), CI workflow, deployment guide, store checklist, privacy manifest
+- Planning notes live in [`memory-bank/`](memory-bank/).
+- **Next**: device-to-device E2E with 2 EAS dev builds + real Expo push tokens + custom sound final asset + AdMob/IAP real IDs + store submission
+
+### Quick Start
+
+**UDL Website:**
+```bash
+npm install
+npm run dev # Vite
+npm run build # 133 modules, 309KB
+```
+
+**iFarted Server:**
+```bash
+cd apps/server
+npm install -g bun # workaround for bun.sh TLS block
+bun install
+bun src/db/migrate.ts
+bun src/index.ts # :3000
+bun src/test.ts # integration test
+```
+
+**iFarted Mobile:**
+```bash
+cd apps/mobile
+npm install
+npx expo start # or --dev-client for dev build
+eas build --profile development --platform all # push testing needs dev build
+```
+
+**Web Demo:** UDL site now has iFarted section at `#ifarted` with mock tap-to-fart + real API try + sound.
+
+See `DEPLOYMENT.md` for full deploy, `apps/mobile/README.md` for mobile, `apps/server/README.md` for server, `apps/mobile/STORE_CHECKLIST.md` for store.
+
+### Branding / Audio (closed in v3)
+- Audio: generated placeholder fart.wav (brown noise + sine sweep down 200→40Hz, 1.2s, envelope) copied to .caf/.mp3 + android raw, <30s for iOS, TODO replace with pro sound
+- Icons: generated placeholder icon.png/adaptive-icon.png/splash.png (minimalist black speech bubble 💨), TODO replace with pro
+- Ads: AdMob wiring with real BannerAd + fallback placeholder, non-personalized, single gated component
+- IAP: RevenueCat favored + expo-iap fallback, $1.99 suggestion, entitlement ad_free, product remove_ads
+- Privacy: PrivacyInfo.xcprivacy, purpose strings in app.json, non-personalized ads no ATT
 
 ---
 
