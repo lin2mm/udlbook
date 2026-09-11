@@ -28,3 +28,36 @@ yarn-error.log*
 
 # macOS
 .DS_Store
+
+# iFarted
+apps/mobile/.expo
+apps/mobile/node_modules
+apps/mobile/dist
+apps/mobile/*.jks
+apps/mobile/*.p8
+apps/mobile/*.p12
+apps/mobile/*.key
+apps/mobile/*.mobileprovision
+apps/mobile/google-services.json
+apps/mobile/GoogleService-Info.plist
+apps/server/node_modules
+apps/server/dist
+apps/server/ifarted.db
+apps/server/ifarted.db-wal
+apps/server/ifarted.db-shm
+apps/server/.env
+apps/server/bun.lock
+packages/*/node_modules
+packages/*/dist
+bun.lockb
+.expo
+.expo-shared
+*.db
+*.db-shm
+*.db-wal
+.env
+.env.local
+ifarted.db
+ifarted.db-shm
+ifarted.db-wal
+

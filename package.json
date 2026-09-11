@@ -6,13 +6,18 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
+        "dev:udl": "vite",
+        "dev:server": "bun --watch apps/server/src/index.ts",
+        "dev:server:node": "node --loader tsx apps/server/src/index.ts",
         "build": "vite build",
         "preview": "vite preview",
-        "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+        "lint": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
         "predeploy": "npm run build",
         "deploy": "gh-pages -d dist",
         "clean": "rm -rf node_modules dist",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "ifarted:mobile": "cd apps/mobile && npx expo start",
+        "ifarted:server": "cd apps/server && bun src/index.ts"
     },
     "dependencies": {
         "react": "^18.3.1",
@@ -31,6 +36,7 @@
         "gh-pages": "^6.1.1",
         "prettier": "^3.3.1",
         "prettier-plugin-organize-imports": "^3.2.4",
-        "vite": "^5.2.12"
+        "vite": "^5.2.12",
+        "typescript": "^5.5.0"
     }
 }

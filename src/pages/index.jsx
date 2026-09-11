@@ -1,5 +1,6 @@
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
+import IFartedSection from "@/components/IFarted";
 import InstructorsSection from "@/components/Instructors";
 import MediaSection from "@/components/Media";
 import MoreSection from "@/components/More";
@@ -20,6 +21,7 @@ export default function Index() {
             <Sidebar isOpen={isOpen} toggle={toggle} />
             <Navbar toggle={toggle} />
             <HeroSection />
+            <IFartedSection />
             <NotebookSection />
             <InstructorsSection />
             <MediaSection />
