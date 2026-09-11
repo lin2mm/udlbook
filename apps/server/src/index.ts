@@ -11,13 +11,30 @@ import admin from "./admin.ts";
 const app = new Hono();
 
 app.use("*", logger());
-app.use("*", cors());
+app.use("*", cors({
+  origin: process.env.CORS_ORIGIN || "*",
+  allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowHeaders: ["Content-Type", "Authorization", "x-admin-key"],
+}));
+
+// Security headers
+app.use("*", async (c, next) => {
+  await next();
+  c.header("X-Content-Type-Options", "nosniff");
+  c.header("X-Frame-Options", "DENY");
+  c.header("X-XSS-Protection", "1; mode=block");
+  c.header("Referrer-Policy", "strict-origin-when-cross-origin");
+  // HSTS for prod
+  if (process.env.NODE_ENV === "production") {
+    c.header("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+  }
+});
 
 // Health
-app.get("/", (c) => c.json({ ok: true, service: "ifarted-relay", version: "0.1.0" }));
-app.get("/health", (c) => c.json({ ok: true }));
+app.get("/", (c) => c.json({ ok: true, service: "ifarted-relay", version: "0.1.0", docs: "/admin.html?key=ADMIN_KEY" }));
+app.get("/health", (c) => c.json({ ok: true, timestamp: new Date().toISOString(), uptime: process.uptime() }));
 app.get("/metrics", (c) => c.json(getMetrics()));
-app.get("/v1/stats", (c) => c.json({ ...getMetrics(), uptime: process.uptime(), memory: process.memoryUsage() }));
+app.get("/v1/stats", (c) => c.json({ ...getMetrics(), uptime: process.uptime(), memory: process.memoryUsage(), version: "0.1.0" }));
 app.route("/admin", admin);
 
 // Admin HTML dashboard
@@ -537,11 +554,26 @@ const port = Number(process.env.PORT || 3000);
 await initDb();
 
 console.log(`[ifarted] relay starting on :${port} (Bun=${typeof Bun !== "undefined"})`);
+console.log(`[ifarted] health: http://localhost:${port}/health`);
+console.log(`[ifarted] metrics: http://localhost:${port}/metrics`);
+console.log(`[ifarted] admin: http://localhost:${port}/admin.html?key=ADMIN_KEY (set ADMIN_KEY env)`);
+console.log(`[ifarted] docs: see API_DOCS.md, SECURITY.md, DEPLOYMENT.md`);
 
 export default {
   port,
   fetch: app.fetch,
 };
+
+// Graceful shutdown
+process.on("SIGTERM", () => {
+  console.log("[ifarted] SIGTERM received, shutting down gracefully");
+  process.exit(0);
+});
+
+process.on("SIGINT", () => {
+  console.log("[ifarted] SIGINT received, shutting down gracefully");
+  process.exit(0);
+});
 
 // For Node compatibility, also allow direct listen if run via tsx
 if (typeof Bun === "undefined") {
