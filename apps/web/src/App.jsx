@@ -15,6 +15,11 @@ export default function App() {
   const [sending, setSending] = useState(null);
   const [inviteCode, setInviteCode] = useState('');
   const [inviteLink, setInviteLink] = useState('');
+  const [isDark, setIsDark] = useState(() => localStorage.getItem('ifarted_darkMode') === 'true');
+
+  useEffect(() => {
+    localStorage.setItem('ifarted_darkMode', isDark.toString());
+  }, [isDark]);
 
   useEffect(() => {
     fetch(`${API_URL}/health`)
@@ -130,19 +135,29 @@ export default function App() {
 
   const displayFriends = friends.length > 0 ? friends : mockFriends;
 
+  const bg = isDark ? '#1a1a1a' : '#fff7ed';
+  const cardBg = isDark ? '#2a2a2a' : '#fff';
+  const text = isDark ? '#fff' : '#000';
+  const subText = isDark ? '#aaa' : '#666';
+
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto', padding: 24 }}>
-      <h1 style={{ fontSize: 36, fontWeight: 800 }}>💨 iFarted — Web Demo</h1>
-      <p style={{ color: '#666' }}>Dead-simple Yo-style: "I farted." is the entire message. No typing, no inbox, notification IS message. Server: {serverStatus} {metrics && `· ${metrics.totalFarts} farts, ${metrics.totalUsers} users, ${metrics.fartsLastHour}/hour`}</p>
+    <div style={{ maxWidth: 900, margin: '0 auto', padding: 24, background: bg, color: text, minHeight: '100vh' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1 style={{ fontSize: 36, fontWeight: 800 }}>💨 iFarted — Web Demo</h1>
+        <button onClick={()=>setIsDark(!isDark)} style={{ background: isDark ? '#fff' : '#000', color: isDark ? '#000' : '#fff', border: 'none', borderRadius: 8, padding: '8px 12px' }}>
+          {isDark ? '☀️ Light' : '🌙 Dark'}
+        </button>
+      </div>
+      <p style={{ color: subText }}>Dead-simple Yo-style: "I farted." is the entire message. No typing, no inbox, notification IS message. Server: {serverStatus} {metrics && `· ${metrics.totalFarts} farts, ${metrics.totalUsers} users, ${metrics.fartsLastHour}/hour`}</p>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 24 }}>
-        <div style={{ background: '#fff', border: '2px solid #000', borderRadius: 16, padding: 16, boxShadow: '4px 4px 0 #000' }}>
+        <div style={{ background: cardBg, border: `2px solid ${text}`, borderRadius: 16, padding: 16, boxShadow: `4px 4px 0 ${text}` }}>
           <h3>Register</h3>
           <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
             <input value={username} onChange={e=>setUsername(e.target.value)} placeholder="username" style={{ flex: 1, padding: 8, borderRadius: 8, border: '1px solid #ddd' }} />
             <button onClick={register} style={{ background: '#000', color: '#fff', border: 'none', borderRadius: 8, padding: '8px 12px' }}>Register</button>
           </div>
-          {apiKey && <p style={{ fontSize: 11, color: '#666', marginTop: 8 }}>✅ {userId.slice(0,8)}... {apiKey.slice(0,8)}... (localStorage)</p>}
+          {apiKey && <p style={{ fontSize: 11, color: subText, marginTop: 8 }}>✅ {userId.slice(0,8)}... {apiKey.slice(0,8)}... (localStorage)</p>}
 
           <h3 style={{ marginTop: 16 }}>Search @username</h3>
           <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
@@ -161,21 +176,21 @@ export default function App() {
           {inviteCode && <p style={{ fontSize: 12, marginTop: 8 }}><strong>{inviteCode}</strong> — {inviteLink}</p>}
 
           <h3 style={{ marginTop: 16 }}>Log</h3>
-          <div style={{ background: '#f8f8f8', padding: 8, borderRadius: 8, fontSize: 11, fontFamily: 'monospace', maxHeight: 200, overflowY: 'auto' }}>
+          <div style={{ background: isDark ? '#1a1a1a' : '#f8f8f8', padding: 8, borderRadius: 8, fontSize: 11, fontFamily: 'monospace', maxHeight: 200, overflowY: 'auto' }}>
             {log.map((l,i)=><div key={i}>{l}</div>)}
             {log.length===0 && <div style={{ color: '#999' }}>No logs yet. Register → search → add friend → tap 💨 Fart</div>}
           </div>
         </div>
 
-        <div style={{ background: '#fff', border: '2px solid #000', borderRadius: 16, padding: 16, boxShadow: '4px 4px 0 #000' }}>
+        <div style={{ background: cardBg, border: `2px solid ${text}`, borderRadius: 16, padding: 16, boxShadow: `4px 4px 0 ${text}` }}>
           <h3>Home — Tap to Fart</h3>
-          <p style={{ fontSize: 12, color: '#666' }}>Recipient list ordered by most-recently active (Yo-style). No inbox/history. {displayFriends.length} friends</p>
+          <p style={{ fontSize: 12, color: subText }}>Recipient list ordered by most-recently active (Yo-style). No inbox/history. {displayFriends.length} friends</p>
           <div style={{ marginTop: 12 }}>
             {displayFriends.map(f => (
-              <div key={f.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid #eee' }}>
+              <div key={f.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: `1px solid ${isDark ? '#444' : '#eee'}` }}>
                 <div>
                   <div style={{ fontWeight: 600 }}>{f.displayName || f.username}</div>
-                  <div style={{ fontSize: 11, color: '#666' }}>@{f.username} · {f.addedVia} {f.lastFartAt ? `· last ${new Date(f.lastFartAt).toLocaleTimeString()}` : ''}</div>
+                  <div style={{ fontSize: 11, color: subText }}>@{f.username} · {f.addedVia} {f.lastFartAt ? `· last ${new Date(f.lastFartAt).toLocaleTimeString()}` : ''}</div>
                 </div>
                 <button disabled={sending===f.id} onClick={()=>sendFart(f)} style={{ background: '#000', color: '#fff', border: 'none', borderRadius: 20, padding: '8px 16px', fontWeight: 700 }}>
                   {sending===f.id ? '...' : '💨 Fart'}
@@ -183,23 +198,29 @@ export default function App() {
               </div>
             ))}
           </div>
-          <p style={{ fontSize: 11, color: '#666', marginTop: 12 }}>Context-based messaging: "You understand by the context what is being said." — Or Arbel (Yo creator). One phrase, meaning from context.</p>
-          <div style={{ height: 50, background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 12, borderTop: '1px solid #eee' }}>
+          <p style={{ fontSize: 11, color: subText, marginTop: 12 }}>Context-based messaging: "You understand by the context what is being said." — Or Arbel (Yo creator). One phrase, meaning from context.</p>
+          <div style={{ height: 50, background: isDark ? '#1a1a1a' : '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 12, borderTop: `1px solid ${isDark ? '#444' : '#eee'}` }}>
             <span style={{ fontSize: 11, color: '#999' }}>AdMob Banner — Remove Ads in Settings ($1.99) · Non-personalized</span>
           </div>
         </div>
       </div>
 
-      <div style={{ marginTop: 24, padding: 16, background: '#fff', borderRadius: 12, border: '1px solid #eee' }}>
+      <div style={{ marginTop: 24, padding: 16, background: cardBg, borderRadius: 12, border: `1px solid ${isDark ? '#444' : '#eee'}` }}>
         <h4>Architecture</h4>
-        <pre style={{ fontSize: 11, overflowX: 'auto' }}>{`[Sender — Web/Mobile] POST /v1/farts {recipientId, lat?, lng?} (Bearer apiKey)
+        <pre style={{ fontSize: 11, overflowX: 'auto', background: isDark ? '#1a1a1a' : '#f8f8f8', padding: 12, borderRadius: 8 }}>{`[Sender — Web/Mobile] POST /v1/farts {recipientId, lat?, lng?} (Bearer apiKey)
     ↓
-[Bun relay] auth + rate limit → insert message → POST https://exp.host/--/api/v2/push/send {to, title=senderName, body="I farted.", sound="fart.caf", data:{...}}
+[Bun relay] auth + rate limit → insert message → recordFart() → call Expo Push API:
+    POST https://exp.host/--/api/v2/push/send {to, title=senderName, body="I farted.", sound="fart.caf", data:{...}}
     ↓
 [Expo Push Service] → [APNs / FCM]
     ↓
-[Recipient] OS notification → tap → fart-detail + map pin + fart back`}</pre>
-        <p style={{ fontSize: 12, color: '#666' }}>No inbox/history — notification IS message. Messages table kept only for rate limiting/abuse. Thin client, thin backend.</p>
+[Recipient] OS notification (title=senderName, body="I farted.", sound=fart.caf) → tap → fart-detail + map pin + fart back`}</pre>
+        <p style={{ fontSize: 12, color: subText }}>No inbox/history — notification IS message. Messages table kept only for rate limiting/abuse. Thin client, thin backend.</p>
+      </div>
+
+      <div style={{ marginTop: 16, textAlign: 'center', fontSize: 11, color: subText }}>
+        <p>iFarted v0.9.0 Alpha — Scaffold v10 — Server live :3000 — Web demo 5174 — UDL site 5173</p>
+        <p>Drive folder 18r18wIm0ftoZ1Pq-l2g2MddqCf17sxsX · GitHub arena/01a08e52-udlbook · Memory Bank 6 core + research</p>
       </div>
     </div>
   );
