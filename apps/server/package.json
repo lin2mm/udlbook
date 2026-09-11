@@ -1,0 +1,23 @@
+{
+  "name": "@ifarted/server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "dev:node": "node --loader tsx src/index.ts",
+    "start": "bun src/index.ts",
+    "start:node": "node --loader tsx src/index.ts",
+    "db:migrate": "bun src/db/migrate.ts",
+    "lint": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "hono": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.0",
+    "typescript": "^5.5.0",
+    "tsx": "^4.16.0"
+  }
+}
