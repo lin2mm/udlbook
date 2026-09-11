@@ -5,6 +5,7 @@ import { getDb, initDb } from "./db/index.ts";
 import { generateApiKey, hashApiKey, generateId, generateInviteCode } from "./lib/crypto.ts";
 import { rateLimitFart } from "./lib/rate-limit.ts";
 import { sendExpoPush, buildFartPushMessage } from "./lib/expo-push.ts";
+import { recordFart, getMetrics } from "./lib/metrics.ts";
 
 const app = new Hono();
 
@@ -14,6 +15,8 @@ app.use("*", cors());
 // Health
 app.get("/", (c) => c.json({ ok: true, service: "ifarted-relay", version: "0.1.0" }));
 app.get("/health", (c) => c.json({ ok: true }));
+app.get("/metrics", (c) => c.json(getMetrics()));
+app.get("/v1/stats", (c) => c.json({ ...getMetrics(), uptime: process.uptime(), memory: process.memoryUsage() }));
 
 // Simple auth middleware — extracts Bearer apiKey and resolves user
 async function auth(c: any, next: any) {
@@ -230,6 +233,9 @@ app.post("/v1/farts", auth, async (c) => {
   } catch (e) {
     console.warn("[farts] message insert failed", e);
   }
+
+  // Record metrics
+  recordFart(sender.id, recipientId);
 
   // Build push messages
   const pushes = recipientTokens.map((t: any) =>
